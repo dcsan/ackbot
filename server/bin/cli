@@ -278,8 +278,10 @@ function main() {
       ;;
 
 
-    "coldStart")
+    "firstRun")
       readEnv $envOpt
+      syncRemote
+      installRemote
       coldStart
       ;;
 
