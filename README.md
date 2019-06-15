@@ -1,2 +1,0 @@
-# ackbot
-ack response
