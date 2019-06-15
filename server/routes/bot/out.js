@@ -4,14 +4,14 @@ const axios = require('axios')
 const debug = require('debug-levels')('bot/out')
 
 const config = {
-  base: "https://api.botorange.com/xiaoju/message/send",
+  sendUrl: "https://api.botorange.com/xiaoju/message/send",
   token: process.env.BO_TOKEN,
-  testChatId: '5d023934bd6faa1c4e8f7bbf'
+  testChatId: process.env.TEST_CHAT_ID,
 }
 
 /* trigger output message */
 router.get('/bot/out', function(req, res, next) {
-  let uri = `${config.base}`
+  let sendUrl = config.sendUrl
   let data = {
     "chatId": config.testChatId,
     "token": config.token,
@@ -20,22 +20,29 @@ router.get('/bot/out', function(req, res, next) {
         "text": "from code"
     }
   }
-  debug('bot/out', data)
 
-  // @ts-ignore
-  // axios({
-    //   method: 'post',
-    //   url: uri,
-    //   data: data
-    // });
+  debug.log('send uri:', sendUrl)
+  debug.log('send data:', data)
 
-    console.log('send:', data)
-    console.log('uri', uri)
-    // @ts-ignore
-  axios.post(uri, data).then( function(response) {
-    console.log('response', response)
+  axios({
+    method: 'post',
+    url: sendUrl,
+    timeout: 3000,
+    data: data
+  })
+  .then( function(response) {
+    debug.log('send response', response)
     res.json(data)
   })
+  .catch(function (err) {
+    debug.error('failed to send')
+    // TODO - check what type of error
+    res.status(500).json({
+      status: 500,
+      msg: 'failed to send / timeout'
+    })
+  })
+
 })
 
 module.exports = router
