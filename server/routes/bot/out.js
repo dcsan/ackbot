@@ -4,9 +4,24 @@ const axios = require('axios')
 const debug = require('debug-levels')('bot/out')
 
 const config = {
-  sendUrl: "https://api.botorange.com/xiaoju/message/send",
-  token: process.env.BO_TOKEN,
+  sendUrl: process.env.BOTO_DOMAIN + "/message/send",
+  token: process.env.BOTO_TOKEN,
   testChatId: process.env.TEST_CHAT_ID,
+}
+
+// https://github.com/botorange/xiaoju/wiki/API-Doc
+// enum MessageType {
+//   TEXT = 0,
+//   IMAGE = 1,
+//   URL_LINK = 2,
+//   FILE = 3,
+// }
+
+const BotoMessageTypes = {
+  TEXT: 0,
+  IMAGE: 1,
+  URL_LINK: 2,
+  FILE: 3,
 }
 
 /* trigger output message */
@@ -15,7 +30,7 @@ router.get('/bot/out', function(req, res, next) {
   let data = {
     "chatId": config.testChatId,
     "token": config.token,
-    "messageType": 1, // MessageType, check below
+    "messageType": BotoMessageTypes.TEXT,
     "payload": {
         "text": "from code"
     }
@@ -37,11 +52,11 @@ router.get('/bot/out', function(req, res, next) {
     res.json(data)
   })
   .catch(function (err) {
-    debug.error('failed to send')
+    debug.error('failed to send', err)
     // TODO - check what type of error
     res.status(500).json({
       status: 500,
-      msg: 'failed to send / timeout'
+      msg: 'failed to send: ' + err
     })
   })
 
