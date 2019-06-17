@@ -4,13 +4,13 @@ let router = express.Router()
 const debug = require('debug-levels')('bot/in')
 
 function logInput(msg) {
-  debug.log("msg", msg)
+  debug.log("msg:\n", msg)
 }
 
 // incoming message
 router.post('/bot/in/message', function(req, res, next) {
-  debug.info('ok POST in/message')
-  debug.info('POST req.body', req.body)
+  debug.info('POST in/message')
+  // debug.info('POST req.body', req.body)
   logInput(req.body)
   res.status(200)
   res.send('ok')
@@ -18,7 +18,7 @@ router.post('/bot/in/message', function(req, res, next) {
 
 /* GET just to check end-points are working */
 router.get('/bot/in/message', function(req, res, next) {
-  debug.info('GET /in/message', req.body)
+  debug.info('GET /in/message')
   logInput(req.body)
   res.status(200)
   res.send('ok')

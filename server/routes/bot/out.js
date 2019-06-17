@@ -21,15 +21,17 @@ router.get('/bot/out', function(req, res, next) {
     }
   }
 
-  debug.log('send uri:', sendUrl)
-  debug.log('send data:', data)
-
-  axios({
+  // debug.log('send uri:', sendUrl)
+  let blob = {
     method: 'post',
     url: sendUrl,
     timeout: 3000,
     data: data
-  })
+  }
+  debug.log('send blob:', blob)
+
+  // @ts-ignore
+  axios(blob)
   .then( function(response) {
     debug.log('send response', response)
     res.json(data)
