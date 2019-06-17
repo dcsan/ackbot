@@ -15,7 +15,7 @@ router.get('/bot/out', function(req, res, next) {
   let data = {
     "chatId": config.testChatId,
     "token": config.token,
-    "messageType": 0, // MessageType, check below
+    "messageType": 1, // MessageType, check below
     "payload": {
         "text": "from code"
     }
